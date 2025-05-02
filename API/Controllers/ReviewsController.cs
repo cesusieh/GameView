@@ -1,37 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using API.Services;
+using API.Models;
 
-namespace API.Controllers
+namespace API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ReviewsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ReviewsController : ControllerBase
+    private readonly RapidApiGameReviewService _reviewService;
+
+    public ReviewsController(RapidApiGameReviewService reviewService)
     {
-        private readonly RapidApiGameReviewService _reviewService;
+        _reviewService = reviewService;
+    }
 
-        public ReviewsController(RapidApiGameReviewService reviewService)
-        {
-            _reviewService = reviewService;
-        }
+    [HttpGet("destructoid")]
+    public async Task<ActionResult<GameReviewResult>> GetDestructoidReviews()
+    {
+        var result = await _reviewService.GetDestructoidReviewsAsync();
+        if (result == null)
+            return NotFound("Dados não encontrados ou erro na API.");
 
-        // Endpoint para obter reviews do Destructoid
-        [HttpGet("destructoid")]
-        public async Task<IActionResult> GetDestructoidReviews()
-        {
-            var data = await _reviewService.GetDestructoidReviewsAsync();
-            
-            if (data == null)
-            {
-                return NotFound("Não foi possível obter os reviews.");
-            }
-
-            // Aqui, você pode converter o JSON em objetos `Jogo` ou retornar o JSON como está
-            // Para isso, pode usar o modelo `Jogo` para mapear os dados do JSON
-
-            return Ok(data); // Por enquanto, retorna os dados crus da API
-        }
+        return Ok(result);
     }
 }

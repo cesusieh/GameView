@@ -1,3 +1,8 @@
+namespace API.Services;
+using System.Text.Json;
+using API.Models;
+
+
 public class RapidApiGameReviewService
 {
     private readonly HttpClient _httpClient;
@@ -9,8 +14,9 @@ public class RapidApiGameReviewService
         _config = config;
     }
 
-    public async Task<string?> GetDestructoidReviewsAsync()
+    public async Task<GameReviewResult> GetDestructoidReviewsAsync()
     {
+        
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
@@ -26,6 +32,14 @@ public class RapidApiGameReviewService
         if (!response.IsSuccessStatusCode)
             return null;
 
-        return await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync();
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var result = JsonSerializer.Deserialize<GameReviewResult>(json, options);
+        return result;
     }
 }

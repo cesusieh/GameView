@@ -1,12 +1,20 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using API.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHttpClient<RapidApiGameReviewService>();
+builder.Services.AddHttpClient<RapidApiGameReviewService>()
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+    });
+
 
 
 string connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
