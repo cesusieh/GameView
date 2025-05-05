@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import './auth.css';
+import { registerUser } from '../services/auth'
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLogin) {
       console.log('Login attempt:', { username, password });
     } else {
-      console.log('Registro attempt:', { username, password });
+      registerUser(username, password)
     }
   };
 
