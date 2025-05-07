@@ -1,4 +1,4 @@
-using API.models;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data 
@@ -7,5 +7,6 @@ namespace API.Data
     {
         public AppDbContext(DbContextOptions options) : base(options){}
         public DbSet <User> User {get; set;}
+        public DbSet<Review> GameReviews { get; set; }
     }
 }
