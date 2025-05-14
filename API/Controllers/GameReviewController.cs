@@ -29,6 +29,7 @@ namespace API.Controllers
             return await _context.GameReviews.ToListAsync();
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview(int id)
         {
@@ -40,6 +41,7 @@ namespace API.Controllers
             return review;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Review>> CreateReview(Review review)
         {
@@ -49,6 +51,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetReview), new { id = review.Id }, review);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReview(int id, Review review)
         {
@@ -72,6 +75,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
