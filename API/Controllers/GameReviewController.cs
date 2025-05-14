@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using API.Models; // Adicionando o namespace correto para Review
+using API.Models;
 using API.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class GameReviewController : ControllerBase
@@ -20,14 +22,13 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/GameReviews
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
             return await _context.GameReviews.ToListAsync();
         }
 
-        // GET: api/GameReviews/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview(int id)
         {
@@ -39,7 +40,6 @@ namespace API.Controllers
             return review;
         }
 
-        // POST: api/GameReviews
         [HttpPost]
         public async Task<ActionResult<Review>> CreateReview(Review review)
         {
@@ -49,7 +49,6 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetReview), new { id = review.Id }, review);
         }
 
-        // PUT: api/GameReviews/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReview(int id, Review review)
         {
@@ -73,7 +72,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/GameReviews/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
