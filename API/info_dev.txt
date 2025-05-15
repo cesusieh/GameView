@@ -1,6 +1,0 @@
-02/05/2025
-
-Inicio Desenvolvimento Classe Jogo
-Classe responsavel por receber os dados de reviews para renderização, tentativa de utilização da API RapidAPI
-https://rapidapi.com/fluis.lacasse/api/esportapi1/playground/apiendpoint_54cd6bf9-dd5f-445e-b491-d1c4438c334c
-porem api retornando dados criptografados.

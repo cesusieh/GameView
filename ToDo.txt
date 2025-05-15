@@ -1,0 +1,6 @@
+Criar landpage
+Criar home
+
+Criar classes de sucesso e falha no resultado do login/cadastro
+Melhorar validação de campos do login/cadastro
+Melhorar estilização do login/cadastro
