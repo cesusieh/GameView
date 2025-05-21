@@ -1,12 +1,12 @@
-import './App.css';
-import AuthForm from './pages/auth';
+import './App.css'
+import Home from './pages/home'
 
 function App() {
   return (
     <div className="App">
-        <AuthForm />
+        <Home />
     </div>
   );
 }
 
-export default App;
+export default App

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { registerUser, login } from '../services/auth'
-import './auth.css';
+import '../styles/auth.css'
 
 export default function AuthForm() {
   const [loginOrRegister, setLoginOrRegister] = useState(true); 
