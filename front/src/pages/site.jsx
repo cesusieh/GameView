@@ -28,7 +28,7 @@ export default function Site() {
         </section>
       </main>
       <footer className="site-footer">
-        <span>GameView &copy; {new Date().getFullYear()} &mdash; Desenvolvido por Sua Equipe</span>
+        <span>GameView &copy; {new Date().getFullYear()} &mdash; Desenvolvido por turma do pagode</span>
       </footer>
     </div>
   );

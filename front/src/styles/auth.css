@@ -1,21 +1,18 @@
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
   margin: 0;
-  background-color: #121212; /* Fundo escuro */
+  background-color: #121212;
   font-family: sans-serif;
-  color: #fff; /* Texto branco para contraste */
+  color: #fff;
 }
 
 .auth-container {
-  width: 300px;
-  padding: 20px;
+  width: 360px;           /* aumenta a largura */
+  padding: 36px 32px;     /* aumenta o padding */
   border: 1px solid #333;
-  border-radius: 8px;
-  background-color: #1e1e1e; /* Caixa escura */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
 }
 
 h2 {
@@ -26,12 +23,13 @@ h2 {
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 22px;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
+  gap: 8px;  
 }
 
 label {
@@ -41,12 +39,12 @@ label {
 }
 
 input {
-  padding: 10px;
+  padding: 14px;          /* aumenta a altura dos inputs */
+  font-size: 16px;        /* aumenta o tamanho da fonte */
   background-color: #2b2b2b;
   color: #fff;
   border: 1px solid #555;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
 }
 
 input:focus {
@@ -56,13 +54,14 @@ input:focus {
 }
 
 .auth-button {
-  padding: 10px;
+  padding: 15px;
   background-color: #4e90ff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  margin: 10px;
 }
 
 .auth-button:hover {
@@ -86,4 +85,11 @@ input:focus {
   text-align: center;
   margin-bottom: 12px;
   font-weight: bold;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
