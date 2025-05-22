@@ -4,7 +4,7 @@ export async function registerUser(username, password){
   try {
     const response = await axios.post("http://localhost:5044/API/users", {
         username, password
-    })
+    }, {withCredentials: true,})
     return {
       message:response.data.message,
       success:true

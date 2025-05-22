@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -62,7 +63,10 @@ namespace API.Controllers
 
             Response.Cookies.Append("token", HCToken, new CookieOptions
             {
-                Expires = DateTimeOffset.UtcNow.AddHours(1)
+                Expires = DateTimeOffset.UtcNow.AddHours(1),
+                HttpOnly = true, // recomendado para JWT
+                SameSite = SameSiteMode.Lax, // ou Lax, conforme sua necessidade
+                Secure = false // use true se estiver usando HTTPS
             });
 
             return Ok(new
@@ -70,6 +74,25 @@ namespace API.Controllers
                 message = "Você está logado!",
                 token = HCToken
             });
+        }
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Append("token", "", new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(-1),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Secure = true // use true se estiver usando HTTPS
+            });
+
+            return Ok(new { message = "Logout realizado com sucesso!" });
+        }
+        [HttpGet("/api/auth/check")]
+        [Authorize]
+        public IActionResult CheckAuth()
+        {
+            return Ok();
         }
     }
 }

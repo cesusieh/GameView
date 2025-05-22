@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+html, body, #root {
+  height: 100%;
+  min-height: 100vh;
+  background: #121212;
+}
+
 body {
   font-family: Arial, sans-serif;
 }
@@ -46,5 +52,57 @@ ul li a:hover {
 }
 
 main {
-  padding: 100px 40px 40px; /* Adiciona espaço no topo para a navbar */
+  padding: 100px 40px 40px; /* já está correto para compensar a navbar fixa */
+  min-height: calc(100vh - 100px); /* ocupa a tela inteira, exceto navbar */
+  background: #121212;
+  color: #fff;
+}
+
+.home-main {
+  min-height: calc(100vh - 100px); /* ajuste conforme altura da navbar */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #121212;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  max-width: 600px; /* aumenta o comprimento */
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 18px; /* diminui a altura, mantém confortável */
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #23272f;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.search-button {
+  width: 60%; /* botão mais estreito que o input */
+  align-self: center;
+  padding: 10px;
+  font-size: 1.05rem;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+
+.search-button:hover {
+  background: #1d4ed8;
 }

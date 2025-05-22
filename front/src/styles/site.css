@@ -1,0 +1,84 @@
+.site-root {
+  min-height: 100vh;
+  background-color: #121212;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+}
+
+.site-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Remova flex-direction: column; se não precisar */
+  min-height: 0; /* Garante que não ultrapasse o tamanho do root */
+}
+
+.intro-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  /* Remova margin-top e margin-bottom se quiser ocupar toda a altura */
+}
+
+.intro-text {
+  max-width: 400px;
+  text-align: left;
+}
+
+.intro-text h1 {
+  font-size: 2.2rem;
+  margin-bottom: 18px;
+  color: #4e90ff;
+}
+
+.intro-text p {
+  font-size: 1.1rem;
+  color: #bbb;
+  line-height: 1.6;
+}
+
+.intro-image img {
+  width: 340px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  background: #222;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.nav-btn {
+  padding: 8px 22px;
+  background-color: #4e90ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: #3578d6;
+}
+
+.site-footer {
+  width: 100%;
+  padding: 18px 0;
+  background-color: #181818;
+  color: #bbb;
+  text-align: center;
+  font-size: 1rem;
+  border-top: 1px solid #222;
+}
