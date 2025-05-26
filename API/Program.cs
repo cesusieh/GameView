@@ -56,7 +56,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddHttpClient<RapidApiGameReviewService>()
+// Aqui substituí RapidApiGameReviewService pelo Rawg
+builder.Services.AddHttpClient<Rawg>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
     {
         AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
@@ -92,7 +93,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -113,6 +113,5 @@ app.UseAuthorization();
 app.UseCors("AllowLocalhost3000");
 app.UseHttpsRedirection();
 app.MapControllers();
-
 
 app.Run();

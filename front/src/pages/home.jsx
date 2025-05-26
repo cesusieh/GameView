@@ -8,6 +8,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     axios.get("http://localhost:5044/api/auth/check", { withCredentials: true })
@@ -17,13 +18,30 @@ export default function Home() {
       });
   }, [navigate]);
 
-  if (loading) return null; // ou um spinner
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (search.length > 2) {
+        axios.get(`http://localhost:5044/api/Games/search?q=${search}`)
+          .then(res => {
+            // extrair só o array results
+            const games = res.data.results || [];
+            setResults(games);
+          })
+          .catch(() => setResults([]));
+      } else {
+        setResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Aqui você pode implementar a lógica de pesquisa
     alert(`Pesquisar por: ${search}`);
   };
+
+  if (loading) return null;
 
   return (
     <>
@@ -41,6 +59,17 @@ export default function Home() {
             Pesquisar
           </button>
         </form>
+
+        {/* Resultados da busca abaixo do input */}
+        {results.length > 0 && (
+          <div className="search-results">
+            {results.map((item, index) => (
+              <div key={index} className="search-result-item">
+                {item.name /* use "name" para o nome do jogo */}
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </>
   );

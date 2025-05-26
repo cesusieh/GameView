@@ -108,23 +108,7 @@ export default function NavBar() {
                             }}
                             onClick={() => navigate("/login")}
                         >
-                            Login
-                        </button>
-                        <button
-                            className="nav-btn"
-                            style={{
-                                backgroundColor: "#4e90ff",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                fontSize: "15px",
-                                fontWeight: "bold",
-                                padding: "8px 22px",
-                                cursor: "pointer"
-                            }}
-                            onClick={() => navigate("/register")}
-                        >
-                            Registrar
+                            Entrar
                         </button>
                     </>
                 )}
