@@ -1,7 +1,3 @@
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-
 namespace API.Services
 {
     public class Rawg
@@ -18,6 +14,16 @@ namespace API.Services
         public async Task<string> SearchGamesAsync(string query)
         {
             var url = $"https://api.rawg.io/api/games?key={_rawgApiKey}&search={query}";
+            var response = await _httpClient.GetAsync(url);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> GetGameByIdAsync(int gameId)
+        {
+            var url = $"https://api.rawg.io/api/games/{gameId}?key={_rawgApiKey}";
             var response = await _httpClient.GetAsync(url);
 
             response.EnsureSuccessStatusCode();
