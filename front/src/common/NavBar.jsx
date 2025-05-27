@@ -29,9 +29,8 @@ export default function NavBar() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                padding: "24px 60px",
+                padding: "12px 30px",
                 backgroundColor: "#2563eb",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 color: "white"
             }}>
             <div style={{ fontSize: "24px", fontWeight: "bold", color: "white" }}> Gameview </div>
@@ -65,12 +64,11 @@ export default function NavBar() {
                                 color: "white",
                                 border: "none",
                                 borderRadius: "8px",
-                                width: "100px",
-                                height: "40px",
+                                width: "150px",
+                                height: "45px",
                                 cursor: "pointer",
                                 fontWeight: "bold",
                                 fontSize: "16px",
-                                marginLeft: "10px",
                                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                                 transition: "background-color 0.3s ease"
                             }}

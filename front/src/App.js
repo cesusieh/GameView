@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from './pages/home'
-import AuthForm from './pages/auth'
-import Site from './pages/site'
+import Home from './pages/Home'
+import AuthForm from './pages/Auth'
+import Site from './pages/Site'
+import GamePage from "./pages/GamePage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/login" element={<AuthForm />} />
         <Route path="/register" element={<AuthForm registerMode={true} />} />
         <Route path="/home" element={<Home />} />
+        <Route path="gamepage/:id" element={<GamePage />} />
       </Routes>
     </BrowserRouter>
   );

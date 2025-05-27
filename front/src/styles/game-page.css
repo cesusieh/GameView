@@ -1,0 +1,115 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: #121212;
+  font-family: sans-serif;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  width: 95vw; 
+  height: 90vh;
+  overflow: hidden;
+}
+
+.game-info {
+  flex: 1;
+  padding: 36px 32px;
+}
+
+.review-form {
+  flex: 2; 
+  padding: 36px 32px;
+}
+
+h2 {
+  text-align: center;
+  color: white;
+  margin-top: 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #bbb;
+}
+
+textarea {
+  padding: 14px;
+  font-size: 16px;
+  background-color: #2b2b2b;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+textarea:focus {
+  border-color: #4e90ff;
+  outline: none;
+  background-color: #333;
+}
+
+button {
+  padding: 15px;
+  background-color: #4e90ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px 0 0 0;
+}
+
+button:hover {
+  background-color: #3578d6;
+}
+
+.review-result.error {
+  color: #ff4d4f;
+  text-align: center;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.review-result.success {
+  color: lightgreen;
+  text-align: center;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.game-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.ratings-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ratings-list li {
+  margin-bottom: 5px;
+}

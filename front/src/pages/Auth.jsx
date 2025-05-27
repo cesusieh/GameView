@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { registerUser, login } from '../services/auth'
+import { registerUser, login } from '../services/auth';
 import { useNavigate, useLocation } from "react-router-dom";
-import '../styles/auth.css'
+import '../styles/auth.css';
 
 export default function AuthForm({ registerMode = false }) {
   const [loginOrRegister, setLoginOrRegister] = useState(!registerMode);
@@ -17,22 +17,18 @@ export default function AuthForm({ registerMode = false }) {
     setLoginOrRegister(!registerMode);
   }, [registerMode]);
 
-  // Exibe a mensagem só se veio de um redirecionamento e limpa depois
   useEffect(() => {
-  if (location.state?.message) {
-    setRedirectMessage(location.state.message);
-    // Limpa o state após exibir a mensagem, sem afetar o fluxo do login
-    const timeout = setTimeout(() => {
-      setRedirectMessage("");
-      // Só limpa o state se ainda estiver na página de login
-      if (location.pathname === "/login") {
-        navigate(location.pathname, { replace: true, state: {} });
-      }
-    }, 3000);
-    return () => clearTimeout(timeout);
-  }
-  // eslint-disable-next-line
-  }, []);
+    if (location.state?.message) {
+      setRedirectMessage(location.state.message);
+      const timeout = setTimeout(() => {
+        setRedirectMessage("");
+        if (location.pathname === "/login") {
+          navigate(location.pathname, { replace: true, state: {} });
+        }
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [location.pathname, location.state?.message, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -5,8 +5,8 @@ namespace API.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options) : base(options){}
-        public DbSet <User> User {get; set;}
-        public DbSet<Review> GameReviews { get; set; }
+        public AppDbContext(DbContextOptions options) : base(options) { }
+        public DbSet<User> User { get; set; }
+        public DbSet<Review> Review { get; set; }
     }
 }

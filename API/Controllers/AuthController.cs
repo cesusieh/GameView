@@ -64,9 +64,9 @@ namespace API.Controllers
             Response.Cookies.Append("token", HCToken, new CookieOptions
             {
                 Expires = DateTimeOffset.UtcNow.AddHours(1),
-                HttpOnly = true, // recomendado para JWT
-                SameSite = SameSiteMode.Lax, // ou Lax, conforme sua necessidade
-                Secure = false // use true se estiver usando HTTPS
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Secure = false
             });
 
             return Ok(new
@@ -83,11 +83,12 @@ namespace API.Controllers
                 Expires = DateTimeOffset.UtcNow.AddDays(-1),
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,
-                Secure = true // use true se estiver usando HTTPS
+                Secure = true
             });
 
             return Ok(new { message = "Logout realizado com sucesso!" });
         }
+
         [HttpGet("/api/auth/check")]
         [Authorize]
         public IActionResult CheckAuth()

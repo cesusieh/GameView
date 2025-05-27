@@ -14,8 +14,10 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* ---------- Navbar ---------- */
+
 nav {
-  position: fixed; /* Fixar no topo */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -52,20 +54,23 @@ ul li a:hover {
 }
 
 main {
-  padding: 100px 40px 40px; /* já está correto para compensar a navbar fixa */
-  min-height: calc(100vh - 100px); /* ocupa a tela inteira, exceto navbar */
+  padding: 100px 40px 40px;
+  min-height: calc(100vh - 100px);
+  width: 90vw;
   background: #121212;
   color: #fff;
 }
 
 .home-main {
-  min-height: calc(100vh - 100px); /* ajuste conforme altura da navbar */
+  min-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  background: #121212;
+  padding-top: 80px; /* ajuste aqui pra subir ou descer */
 }
+
+/* ---------- Busca ---------- */
 
 .search-form {
   display: flex;
@@ -73,13 +78,17 @@ main {
   align-items: center;
   gap: 18px;
   width: 100%;
-  max-width: 600px; /* aumenta o comprimento */
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
 }
 
 .search-input {
-  width: 100%;
-  padding: 10px 18px; /* diminui a altura, mantém confortável */
-  font-size: 1.1rem;
+  width:100%; /* input com 80% da largura do form */
+  padding: 16px 18px; /* mais alto */
+  font-size: 1.3rem;
   border-radius: 8px;
   border: none;
   outline: none;
@@ -88,21 +97,68 @@ main {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-.search-button {
-  width: 60%; /* botão mais estreito que o input */
-  align-self: center;
-  padding: 10px;
-  font-size: 1.05rem;
-  font-weight: bold;
-  border-radius: 8px;
-  border: none;
-  background: #2563eb;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s;
+/* ---------- Resultados da Busca ---------- */
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 10px;
   margin-top: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 10;
 }
 
-.search-button:hover {
-  background: #1d4ed8;
+.search-result-item {
+  padding: 12px 16px;
+  color: white;
+  text-decoration: none;
+  display: block;
+  border-bottom: 1px solid #333;
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background-color: #2e2e2e;
+}
+
+.search-results {
+  /* seu estilo atual */
+  position: absolute;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-top: 8px;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 10;
+
+  /* scroll customizado */
+  scrollbar-width: thin;              /* Firefox */
+  scrollbar-color: #4e90ff #1e1e1e;  /* Firefox */
+}
+
+/* Webkit browsers (Chrome, Edge, Safari) */
+.search-results::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-results::-webkit-scrollbar-track {
+  background: #1e1e1e;
+  border-radius: 8px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background-color: #4e90ff;
+  border-radius: 8px;
+  border: 2px solid #1e1e1e;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+  background-color: #3578d6;
 }

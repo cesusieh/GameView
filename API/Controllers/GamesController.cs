@@ -70,7 +70,8 @@ namespace API.Controllers
                 var gameDto = new GameDto
                 {
                     Id = root.GetProperty("id").GetInt32(),
-                    Nome = root.GetProperty("name").GetString(),
+                    Name = root.GetProperty("name").GetString(),
+                    Description = root.GetProperty("description_raw").GetString(),
                     Metacritic = root.TryGetProperty("metacritic", out var meta) && meta.ValueKind != JsonValueKind.Null ? meta.GetInt32() : null,
                     BackgroundImage = root.GetProperty("background_image").GetString(),
                     Ratings = root.GetProperty("ratings").EnumerateArray().Select(r => new RatingDto
