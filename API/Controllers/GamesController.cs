@@ -20,7 +20,7 @@ namespace API.Controllers
         public async Task<IActionResult> Search([FromQuery] string q)
         {
             if (string.IsNullOrWhiteSpace(q))
-                return BadRequest(new { error = "Query missing" });
+                return BadRequest(new { error = "Query faltando" });
 
             try
             {

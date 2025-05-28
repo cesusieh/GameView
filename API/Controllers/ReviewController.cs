@@ -24,24 +24,18 @@ namespace API.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
-            {
                 return Unauthorized(new { message = "Usuário não autenticado." });
-            }
 
             int userId = int.Parse(userIdClaim.Value);
 
             review.UserId = userId;
 
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var userExists = await _appDbContext.User.AnyAsync(u => u.Id == userId);
             if (!userExists)
-            {
                 return BadRequest(new { message = "Usuário não encontrado!" });
-            }
 
             _appDbContext.Review.Add(review);
             await _appDbContext.SaveChangesAsync();
@@ -158,14 +152,11 @@ namespace API.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
-            {
                 return Unauthorized(new { message = "Token inválido ou usuário não autenticado" });
-            }
 
             if (!int.TryParse(userIdClaim.Value, out int userId))
-            {
                 return BadRequest(new { message = "Id do usuário inválido" });
-            }
+                
             var reviews = await _appDbContext.Review
                 .Where(r => r.UserId == userId)
                 .OrderByDescending(r => r.CreatedAt)
@@ -187,14 +178,10 @@ namespace API.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
-            {
                 return Unauthorized(new { message = "Token inválido ou usuário não autenticado" });
-            }
 
             if (!int.TryParse(userIdClaim.Value, out int userId))
-            {
                 return BadRequest(new { message = "Id do usuário inválido" });
-            }
 
             var reviews = await _appDbContext.Review
                 .Where(r => r.UserId == userId && r.GameId == gameId)

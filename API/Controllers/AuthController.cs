@@ -34,17 +34,13 @@ namespace API.Controllers
                 .FirstOrDefaultAsync(u => u.Username == loginDto.Username);
 
             if (user == null)
-            {
                 return Unauthorized(new { message = "Usuário ou senha incorretos!" });
-            }
 
             var passwordHasher = new PasswordHasher<User>();
             var result = passwordHasher.VerifyHashedPassword(user, user.Password, loginDto.Password);
 
             if (result == PasswordVerificationResult.Failed)
-            {
                 return Unauthorized(new { message = "Usuário ou senha incorretos!" });
-            }
 
             var claims = new[]
             {

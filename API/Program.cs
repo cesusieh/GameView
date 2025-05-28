@@ -1,7 +1,6 @@
 using API.Extensions;
 using API.Services;
 using API.Settings;
-using Microsoft.OpenApi.Models;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
