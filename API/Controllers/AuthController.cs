@@ -93,7 +93,7 @@ namespace API.Controllers
         [Authorize]
         public IActionResult CheckAuth()
         {
-            return Ok();
+            return Ok(new { message = "Usuário autenticado." });
         }
     }
 }

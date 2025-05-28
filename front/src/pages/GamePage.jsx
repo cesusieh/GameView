@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchGameById } from "../services/rawg";
 import "../styles/game-page.css";
 import NavBar from "../common/NavBar";
+import axios from "axios";
 
 export default function GamePage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,24 +15,41 @@ export default function GamePage() {
   const [resultMsg, setResultMsg] = useState(null);
 
   useEffect(() => {
-    async function loadGame() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const data = await fetchGameById(id);
-        setGame(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login", {
+        state: { message: "Você precisa estar autenticado para acessar esta página." },
+      });
+      return;
     }
 
-    loadGame();
-  }, [id]);
+    axios
+      .get("http://localhost:5044/api/auth/check", { withCredentials: true })
+      .then(() => {
+        async function loadGame() {
+          setLoading(true);
+          setError(null);
 
-  function handleSubmit(e) {
+          try {
+            const data = await fetchGameById(id);
+            setGame(data);
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        }
+
+        loadGame();
+      })
+      .catch(() => {
+        navigate("/login", {
+          state: { message: "Você precisa estar autenticado para acessar esta página." },
+        });
+      });
+  }, [id, navigate]);
+
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!review.trim()) {
@@ -38,8 +57,28 @@ export default function GamePage() {
       return;
     }
 
-    setResultMsg({ error: false, text: "Review enviada com sucesso! Obrigado." });
-    setReview("");
+    try {
+      const response = await axios.post(
+        "http://localhost:5044/api/reviews",
+        {
+          GameID: id,
+          Content: review,
+        },
+        { withCredentials: true }
+      );
+
+      console.log("Resposta do servidor:", response.data);
+
+      setResultMsg({ error: false, text: "Review enviada com sucesso! Obrigado." });
+      setReview("");
+
+      // Redireciona para "Minhas Reviews" após o envio
+      setTimeout(() => {
+        navigate("/my-reviews");
+      }, 1500);
+    } catch (err) {
+      setResultMsg({ error: true, text: "Erro ao enviar a review. Tente novamente." });
+    }
   }
 
   if (loading) {
@@ -73,7 +112,7 @@ export default function GamePage() {
         <div className="container">
           <div className="game-info">
             <img
-              src={game.backgroundImage} 
+              src={game.backgroundImage}
               alt={game.nome || game.name}
               className="game-image"
             />

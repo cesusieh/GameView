@@ -18,17 +18,17 @@ export default function AuthForm({ registerMode = false }) {
   }, [registerMode]);
 
   useEffect(() => {
-    if (location.state?.message) {
-      setRedirectMessage(location.state.message);
-      const timeout = setTimeout(() => {
-        setRedirectMessage("");
-        if (location.pathname === "/login") {
-          navigate(location.pathname, { replace: true, state: {} });
-        }
-      }, 3000);
-      return () => clearTimeout(timeout);
-    }
-  }, [location.pathname, location.state?.message, navigate]);
+  if (location.state?.message) {
+    setRedirectMessage(location.state.message);
+    const timeout = setTimeout(() => {
+      setRedirectMessage("");
+      if (location.pathname === "/login") {
+        navigate(location.pathname, { replace: true, state: {} });
+      }
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }
+}, [location.pathname, location.state?.message, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +36,7 @@ export default function AuthForm({ registerMode = false }) {
       const result = await login(username, password);
       setFormResult(result);
       if (result.success) {
+        localStorage.setItem("token", result.message);
         navigate("/home");
       }
     } else {

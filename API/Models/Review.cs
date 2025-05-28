@@ -1,6 +1,6 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using API.DTOs;
 
 namespace API.Models
 {
@@ -9,11 +9,21 @@ namespace API.Models
         [Key]
         public int ID { get; set; }
 
-        [ForeignKey("User")]
+        [Required]
+        public int GameID { get; set; }
+
+        [Required]
+        public string Content { get; set; }
+
+        [Required]
         public int UserID { get; set; }
 
-        public UserDTO User { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public string GameID { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
+        // Relação com a entidade User
+        [ForeignKey("UserID")]
+        public User User { get; set; }
     }
 }

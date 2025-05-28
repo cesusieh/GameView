@@ -1,27 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 export default function NavBar() {
     const navigate = useNavigate();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const location = useLocation();
+    const isAuthenticated = !!localStorage.getItem("token"); // Verifica se o usuário está autenticado
 
-    useEffect(() => {
-        // Verifica autenticação ao montar a NavBar
-        axios.get("http://localhost:5044/api/auth/check", { withCredentials: true })
-            .then(() => setIsAuthenticated(true))
-            .catch(() => setIsAuthenticated(false));
-    }, []);
-
-    const handleLogout = async () => {
-        try {
-            await axios.post("http://localhost:5044/api/login/logout", {}, { withCredentials: true });
-            setIsAuthenticated(false);
-            navigate("/");
-        } catch (error) {
-            alert("Erro ao fazer logout!");
-        }
-    };
+    // Verifica se a rota atual é uma das especificadas
+    const showHomeButton = isAuthenticated && 
+        (location.pathname === "/home" || location.pathname === "/my-reviews" || location.pathname.startsWith("/gamepage/"));
 
     return (
         <nav
@@ -32,11 +20,34 @@ export default function NavBar() {
                 padding: "12px 30px",
                 backgroundColor: "#2563eb",
                 color: "white"
-            }}>
-            <div style={{ fontSize: "24px", fontWeight: "bold", color: "white" }}> Gameview </div>
+            }}
+        >
+            <div style={{ fontSize: "24px", fontWeight: "bold", color: "white" }}>Gameview</div>
             <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
                 {isAuthenticated ? (
                     <>
+                        {showHomeButton && (
+                            <button
+                                style={{
+                                    backgroundColor: "#1d4ed8",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    width: "150px",
+                                    height: "45px",
+                                    cursor: "pointer",
+                                    fontWeight: "bold",
+                                    fontSize: "16px",
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                                    transition: "background-color 0.3s ease"
+                                }}
+                                onClick={() => navigate("/home")}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#1e40af"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#1d4ed8"}
+                            >
+                                Home
+                            </button>
+                        )}
                         <button
                             style={{
                                 backgroundColor: "#1d4ed8",
@@ -51,14 +62,18 @@ export default function NavBar() {
                                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                                 transition: "background-color 0.3s ease"
                             }}
-                            onClick={() => navigate("/home")}
+                            onClick={() => navigate("/my-reviews")}
                             onMouseOver={e => e.currentTarget.style.backgroundColor = "#1e40af"}
-                            onMouseOut={e => e.currentTarget.style.backgroundColor = "#1d4ed8"}>
+                            onMouseOut={e => e.currentTarget.style.backgroundColor = "#1d4ed8"}
+                        >
                             Minhas reviews
                         </button>
 
                         <button
-                            onClick={handleLogout}
+                            onClick={() => {
+                                localStorage.removeItem("token"); // Remove o token ao fazer logout
+                                navigate("/"); // Redireciona para a página inicial
+                            }}
                             style={{
                                 backgroundColor: "#ef4444",
                                 color: "white",
@@ -106,11 +121,11 @@ export default function NavBar() {
                             }}
                             onClick={() => navigate("/login")}
                         >
-                            Entrar
+                            Login
                         </button>
                     </>
                 )}
             </div>
         </nav>
-    )
+    );
 }
