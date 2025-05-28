@@ -51,6 +51,7 @@ namespace API.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<object>>> GetReviews()
         {
             var reviews = await _appDbContext.Review
@@ -73,6 +74,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<object>> GetReview(int id)
         {
             var review = await _appDbContext.Review
@@ -101,32 +103,48 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateReview(int id, [FromBody] Review updatedReview)
         {
-            var review = await _appDbContext.Review.FindAsync(id);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized(new { message = "Token inválido ou usuário não autenticado" });
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            var review = await _appDbContext.Review.FirstOrDefaultAsync(r => r.Id == id);
 
             if (review == null)
-            {
                 return NotFound(new { message = "Review não encontrado" });
-            }
+
+            if (review.UserId != userId)
+                return Forbid("Você não tem permissão para editar esta review.");
 
             review.Content = updatedReview.Content;
             review.GameId = updatedReview.GameId;
 
             await _appDbContext.SaveChangesAsync();
 
-            return Ok(new { message = "Review atualizado com sucesso!" });
+            return Ok(new { message = "Review atualizada com sucesso!" });
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var review = await _appDbContext.Review.FindAsync(id);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized(new { message = "Token inválido ou usuário não autenticado" });
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            var review = await _appDbContext.Review.FirstOrDefaultAsync(r => r.Id == id);
 
             if (review == null)
-            {
                 return NotFound(new { message = "Review não encontrado" });
-            }
+
+            if (review.UserId != userId)
+                return Forbid("Você não tem permissão para deletar esta review.");
 
             _appDbContext.Review.Remove(review);
             await _appDbContext.SaveChangesAsync();

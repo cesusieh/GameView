@@ -4,6 +4,7 @@ using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -67,19 +68,35 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, [FromBody]User user)
+        [Authorize]
+        public async Task<IActionResult> PutUser(int id, [FromBody] User user)
         {
-            User u = await _appDbContext.User.FindAsync(id);
+            var u = await _appDbContext.User.FindAsync(id);
 
             if (u == null)
             {
-                return NotFound(new {message = "Usuário não encontrado" });
+                return NotFound(new { message = "Usuário não encontrado" });
             }
 
-            _appDbContext.Entry(u).CurrentValues.SetValues(user);
+            if (u.Username != user.Username)
+            {
+                bool usernameExists = await _appDbContext.User.AnyAsync(us => us.Username == user.Username);
+                if (usernameExists)
+                {
+                    return Conflict(new { message = "O nome de usuário já está em uso!" });
+                }
+                u.Username = user.Username;
+            }
+
+            if (!string.IsNullOrWhiteSpace(user.Password) && user.Password != u.Password)
+            {
+                var passwordHasher = new PasswordHasher<User>();
+                u.Password = passwordHasher.HashPassword(u, user.Password);
+            }
+
             await _appDbContext.SaveChangesAsync();
 
-            return Ok(new {message = "Atualizado com sucesso!"});
+            return Ok(new { message = "Usuário atualizado com sucesso!" });
         }
 
         [HttpDelete("{id}")]

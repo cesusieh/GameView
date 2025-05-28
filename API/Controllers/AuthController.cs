@@ -9,6 +9,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using API.Settings;
+using Microsoft.Extensions.Options;
 
 namespace API.Controllers
 {
@@ -17,10 +19,12 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly JwtSettings _jwtSettings;
 
-        public AuthController(AppDbContext appDbContext)
+        public AuthController(AppDbContext appDbContext, IOptions<JwtSettings> jwtSettings)
         {
             _appDbContext = appDbContext;
+            _jwtSettings = jwtSettings.Value;
         }
 
         [HttpPost]
@@ -48,12 +52,12 @@ namespace API.Controllers
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("minha-chave-super-secreta-de-256-bits!12345678"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "suaapi.com",
-                audience: "suaapi.com",
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds
