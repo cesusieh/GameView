@@ -1,4 +1,4 @@
-body {
+.game-page {
   min-height: 100vh;
   margin: 0;
   background-color: #121212;
@@ -6,34 +6,40 @@ body {
   color: #fff;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 445px 20px 20px; 
+  box-sizing: border-box;
 }
 
 .container {
   display: flex;
+  flex-direction: column;
   background-color: #1e1e1e;
   border: 1px solid #333;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-  width: 95vw; 
-  height: 90vh;
-  overflow: hidden;
+  width: 100%;
+  max-width: 1200px; 
+  padding: 20px; 
+  box-sizing: border-box;
 }
 
 .game-info {
-  flex: 1;
-  padding: 36px 32px;
+  margin-bottom: 20px; 
+}
+
+.game-info p {
+  margin-bottom: 16px; /* Adiciona espaçamento entre os parágrafos */
 }
 
 .review-form {
-  flex: 2; 
-  padding: 36px 32px;
+  margin-top: 20px; 
 }
 
 h2 {
   text-align: center;
   color: white;
-  margin-top: 0;
+  margin: 20px 0;
 }
 
 form {
@@ -124,9 +130,9 @@ textarea:focus {
 }
 
 .user-review-item {
-  position: relative; /* importante para o botão absolute funcionar */
+  position: relative;
   background-color: #2a2a2a;
-  padding: 15px 15px 30px 15px; /* espaço extra embaixo para a data */
+  padding: 15px 15px 30px 15px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
   color: #ddd;
@@ -158,15 +164,39 @@ textarea:focus {
   border: none;
   color: #bbb;
   cursor: pointer;
-  font-size: 14px; /* bem pequeno */
+  font-size: 14px;
   padding: 0;
   line-height: 1;
   border-radius: 3px;
-  /* removido transition */
 }
 
 .delete-button:hover {
   color: #ff4d4f;
-  background-color: transparent; /* sem fundo no hover */
-  /* removido transition */
+  background-color: transparent;
+}
+
+/* Responsividade */
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+
+  .game-info {
+    flex: 1;
+    margin-right: 20px; 
+  }
+
+  .review-form {
+    flex: 2;
+    margin-top: 0; 
+  }
+}
+
+.game-footer {
+  padding: 18px 0px 0px;
+  text-align: center;
+  color: #bbb;
+  font-size: 14px;
+  width: 100%; 
+  box-sizing: border-box; 
 }

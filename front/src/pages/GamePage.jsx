@@ -128,10 +128,12 @@ export default function GamePage() {
 
   return (
     <>
+    <div className="game-page">
       <NavBar />
       <div className="body">
         <div className="container">
           <div className="game-info">
+            <br />
             <img
               src={game.backgroundImage}
               alt={game.nome || game.name}
@@ -204,7 +206,11 @@ export default function GamePage() {
             )}
           </div>
         </div>
+      <footer className="game-footer">
+        <span>GameView &copy; {new Date().getFullYear()} &mdash; Desenvolvido por turma do pagode</span>
+      </footer>
       </div>
+    </div>
     </>
   );
 }

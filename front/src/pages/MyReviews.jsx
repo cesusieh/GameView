@@ -80,28 +80,39 @@ export default function MyReviews() {
   }
 
   return (
-    <>
-      <NavBar />
-      <div className="my-reviews-container">
+  <div className="my-reviews-page">
+    <NavBar />
+    <div className="body-my-reviews">
+      <div className="container-my-reviews">
         <h1 className="my-reviews-header">Minhas Reviews</h1>
-        {reviews.length === 0 ? (
+        {loading ? (
+          <p>Carregando...</p>
+        ) : error ? (
+          <p className="empty-message">{error}</p>
+        ) : reviews.length === 0 ? (
           <p className="empty-message">Você ainda não cadastrou nenhuma review.</p>
         ) : (
-          reviews.map(({ id, content, gameId }) => (
-            <div key={id} className="review-card">
-              <p><strong>Conteúdo:</strong> {content}</p>
-              <p>
-                <strong>Jogo:</strong>{" "}
-                {gameNames[gameId] ? (
-                  <Link to={`/gamepage/${gameId}`}>{gameNames[gameId]}</Link>
-                ) : (
-                  "Carregando..."
-                )}
-              </p>
-            </div>
-          ))
+          <div className="reviews-wrapper">
+            {reviews.map(({ id, content, gameId }) => (
+              <div key={id} className="review-card">
+                <p>
+                  <strong>Jogo:</strong>{" "}
+                  {gameNames[gameId] ? (
+                    <Link to={`/gamepage/${gameId}`}>{gameNames[gameId]}</Link>
+                  ) : (
+                    "Carregando..."
+                  )}
+                </p>
+                <p><strong>Conteúdo:</strong> {content}</p>
+              </div>
+            ))}
+          </div>
         )}
       </div>
-    </>
-  );
+    </div>
+    <footer className="my-review-footer">
+      <span>GameView &copy; {new Date().getFullYear()} &mdash; Desenvolvido por turma do pagode</span>
+    </footer>
+  </div>
+);
 }

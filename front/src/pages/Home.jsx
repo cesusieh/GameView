@@ -57,6 +57,11 @@ export default function Home() {
     <>
       <NavBar />
       <main className="home-main">
+        <img 
+        src="/images/home.png" 
+        alt="home" 
+        className="home-image" 
+        />
         <form className="search-form" onSubmit={(e) => e.preventDefault()}>
           <div className="search-wrapper">
             <input
@@ -82,6 +87,9 @@ export default function Home() {
           </div>
         </form>
       </main>
+      <footer className="home-footer">
+        <span>GameView &copy; {new Date().getFullYear()} &mdash; Desenvolvido por turma do pagode</span>
+      </footer>
     </>
   );
 }

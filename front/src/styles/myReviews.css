@@ -1,27 +1,91 @@
-.my-reviews-container {
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  /* margin-top: 1rem; */ /* removido para grudar */
+/* Estilização global */
+.my-reviews-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #121212;
+  color: #fff;
+  font-family: sans-serif;
 }
 
+/* Área do conteúdo principal */
+.body-my-reviews {
+  flex: 1;
+  display: flex;
+  justify-content: center; 
+  align-items: flex-start; 
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Container da página */
+.container-my-reviews {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Título */
 .my-reviews-header {
-  grid-column: 1 / -1;
-  text-align: left;
-  margin-bottom: 1rem;
   font-size: 2rem;
-  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
+/* Grid dos cards */
+.reviews-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Card individual */
 .review-card {
-  border: 1px solid #ccc;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
   border-radius: 8px;
   padding: 1rem;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  color: #ddd;
+  font-size: 16px;
+  line-height: 1.4;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+}
+
+/* Mensagens vazias ou erro */
 .empty-message {
-  grid-column: 1 / -1;
-  font-style: italic;
+  color: #bbb;
+  margin-top: 1rem;
+}
+
+/* Footer fixo na base */
+.my-review-footer {
+  padding: 18px 0;
+  margin-top: 20px;
+  text-align: center;
+  color: #bbb;
+  font-size: 14px;
+  background-color: #181818;
+  border-top: 1px solid #222;
+  width: 100vw; 
+  position: fixed; 
+  bottom: 0; 
+  left: 0; 
+  box-sizing: border-box;
+  z-index: 10;
 }
