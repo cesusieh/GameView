@@ -115,7 +115,6 @@ namespace API.Controllers
                 return Forbid("Você não tem permissão para editar esta review.");
 
             review.Content = updatedReview.Content;
-            review.GameId = updatedReview.GameId;
 
             await _appDbContext.SaveChangesAsync();
 

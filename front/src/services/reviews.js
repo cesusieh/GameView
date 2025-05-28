@@ -52,3 +52,17 @@ export async function deleteReview(reviewId) {
     throw err; 
   }
 }
+
+export async function updateReview(reviewId, content) {
+  try {
+    const response = await axios.put(`http://localhost:5044/api/reviews/${reviewId}`,
+      { content },
+      { withCredentials: true }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar review:', error.response?.data || error.message);
+    throw error;
+  }
+}
