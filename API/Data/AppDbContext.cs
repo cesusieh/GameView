@@ -8,6 +8,5 @@ namespace API.Data
         public AppDbContext(DbContextOptions options) : base(options) { }
         public DbSet<User> User { get; set; }
         public DbSet<Review> Review { get; set; }
-        public DbSet<Game> Games { get; set; }
     }
 }

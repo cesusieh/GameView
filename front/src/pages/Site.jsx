@@ -1,18 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import "../styles/site.css";
 import NavBar from "../common/NavBar";
 
 export default function Site() {
-  const navigate = useNavigate();
-
   return (
     <div className="site-root">
-      <NavBar>
-        <div className="nav-buttons">
-          <button className="nav-btn" onClick={() => navigate("/")}>Login</button>
-          <button className="nav-btn" onClick={() => navigate("/register")}>Registrar</button>
-        </div>
-      </NavBar>
+      <NavBar />
       <main className="site-main">
         <section className="intro-section">
           <div className="intro-text">

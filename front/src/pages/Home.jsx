@@ -3,33 +3,31 @@ import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../common/NavBar";
 import "../styles/home.css";
 import { searchGames } from "../services/rawg";
-import axios from "axios";
+import { checkAuth } from "../services/auth";
 
 export default function Home() {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Verifica se o token está presente no localStorage
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login", {
-        state: { message: "Você precisa estar autenticado para acessar esta página." },
-      });
-      return;
-    }
-    // Verifica se o usuário está autenticado
-    axios
-      .get("http://localhost:5044/api/auth/check", { withCredentials: true })
-      .then(() => setLoading(false)) // Usuário autenticado
-      .catch(() => {
-        // Redireciona para /login com mensagem
+    const verify = async () => {
+      const authenticated = await checkAuth();
+      if (!authenticated) {
         navigate("/login", {
-          state: { message: "Você precisa estar autenticado para acessar esta página." },
+          state: {
+            message: "Você precisa estar autenticado para acessar esta página.",
+          },
         });
-      });
+        return;
+      }
+      setAuthChecked(true);
+      setLoading(false);
+    };
+    verify();
   }, [navigate]);
 
   useEffect(() => {
@@ -44,7 +42,16 @@ export default function Home() {
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
-  if (loading) return null; // Exibe nada ou um spinner enquanto verifica autenticação
+  if (!authChecked) {
+    return (
+      <>
+        <NavBar />
+        <div className="body">
+          <p>Verificando autenticação...</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

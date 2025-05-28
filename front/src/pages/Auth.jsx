@@ -36,7 +36,6 @@ export default function AuthForm({ registerMode = false }) {
       const result = await login(username, password);
       setFormResult(result);
       if (result.success) {
-        localStorage.setItem("token", result.message);
         navigate("/home");
       }
     } else {

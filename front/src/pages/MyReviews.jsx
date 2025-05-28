@@ -1,83 +1,66 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 import NavBar from "../common/NavBar";
-import "../styles/my-reviews.css";
+import { checkAuth } from "../services/auth";
+import { getMyReviews } from "../services/reviews";
+import { fetchGameById } from "../services/rawg";
+import "../styles/myReviews.css";
 
 export default function MyReviews() {
   const [reviews, setReviews] = useState([]);
+  const [gameNames, setGameNames] = useState({});
   const [loading, setLoading] = useState(true);
-  const [editingReview, setEditingReview] = useState(null);
-  const [updatedContent, setUpdatedContent] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login", {
-        state: { message: "Você precisa estar autenticado para acessar esta página." },
-      });
-      return;
+    async function verifyAndLoad() {
+      const authenticated = await checkAuth();
+
+      if (!authenticated) {
+        navigate("/login", {
+          state: { message: "Você precisa estar autenticado para acessar esta página." },
+        });
+        return;
+      }
+
+      const data = await getMyReviews();
+
+      if (!data || data.length === 0) {
+        setError("Nenhuma review encontrada ou erro ao carregar.");
+        setLoading(false);
+        return;
+      }
+
+      setReviews(data);
+
+      const uniqueGameIds = [...new Set(data.map((r) => r.gameId))];
+
+      const namesMap = {};
+      await Promise.all(
+        uniqueGameIds.map(async (gameId) => {
+          try {
+            const gameData = await fetchGameById(gameId);
+            namesMap[gameId] = gameData.name || "Nome desconhecido";
+          } catch {
+            namesMap[gameId] = "Erro ao carregar nome";
+          }
+        })
+      );
+
+      setGameNames(namesMap);
+      setLoading(false);
     }
 
-    axios
-      .get("http://localhost:5044/api/reviews/my-reviews", { withCredentials: true })
-      .then((response) => {
-        setReviews(response.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        alert("Erro ao carregar suas reviews.");
-        setLoading(false);
-      });
+    verifyAndLoad();
   }, [navigate]);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Tem certeza que deseja excluir esta review?")) {
-      axios
-        .delete(`http://localhost:5044/api/reviews/${id}`, { withCredentials: true })
-        .then(() => {
-          setReviews(reviews.filter((review) => review.ID !== id));
-        })
-        .catch(() => {
-          alert("Erro ao excluir a review.");
-        });
-    }
-  };
-
-  const handleEdit = (review) => {
-    setEditingReview(review);
-    setUpdatedContent(review.Content);
-  };
-
-  const handleUpdate = () => {
-    axios
-      .put(
-        `http://localhost:5044/api/reviews/${editingReview.ID}`,
-        { Content: updatedContent },
-        { withCredentials: true }
-      )
-      .then(() => {
-        setReviews(
-          reviews.map((review) =>
-            review.ID === editingReview.ID ? { ...review, Content: updatedContent } : review
-          )
-        );
-        setEditingReview(null);
-        setUpdatedContent("");
-      })
-      .catch(() => {
-        alert("Erro ao atualizar a review.");
-      });
-  };
-
-    if (loading) {
+  if (loading) {
     return (
       <>
         <NavBar />
         <div className="my-reviews-container">
-          <h1>Minhas Reviews</h1>
+          <h1 className="my-reviews-header">Últimas reviews</h1>
           <p>Carregando suas reviews...</p>
         </div>
       </>
@@ -89,7 +72,7 @@ export default function MyReviews() {
       <>
         <NavBar />
         <div className="my-reviews-container">
-          <h1>Minhas Reviews</h1>
+          <h1 className="my-reviews-header">Últimas reviews</h1>
           <p style={{ color: "red" }}>{error}</p>
         </div>
       </>
@@ -100,33 +83,23 @@ export default function MyReviews() {
     <>
       <NavBar />
       <div className="my-reviews-container">
-        <h1>Minhas Reviews</h1>
+        <h1 className="my-reviews-header">Minhas Reviews</h1>
         {reviews.length === 0 ? (
-          <p>Você ainda não cadastrou nenhuma review.</p>
+          <p className="empty-message">Você ainda não cadastrou nenhuma review.</p>
         ) : (
-          <ul className="reviews-list">
-            {reviews.map((review) => (
-              <li key={review.ID} className="review-item">
-                <p><strong>Jogo:</strong> {review.GameName}</p>
-                {editingReview?.ID === review.ID ? (
-                  <div>
-                    <textarea
-                      value={updatedContent}
-                      onChange={(e) => setUpdatedContent(e.target.value)}
-                    />
-                    <button onClick={handleUpdate} className="update-button">Salvar</button>
-                    <button onClick={() => setEditingReview(null)} className="cancel-button">Cancelar</button>
-                  </div>
+          reviews.map(({ id, content, gameId }) => (
+            <div key={id} className="review-card">
+              <p><strong>Conteúdo:</strong> {content}</p>
+              <p>
+                <strong>Jogo:</strong>{" "}
+                {gameNames[gameId] ? (
+                  <Link to={`/gamepage/${gameId}`}>{gameNames[gameId]}</Link>
                 ) : (
-                  <>
-                    <p><strong>Review:</strong> {review.Content}</p>
-                    <button onClick={() => handleEdit(review)} className="edit-button">Atualizar</button>
-                    <button onClick={() => handleDelete(review.ID)} className="delete-button">Deletar</button>
-                  </>
+                  "Carregando..."
                 )}
-              </li>
-            ))}
-          </ul>
+              </p>
+            </div>
+          ))
         )}
       </div>
     </>

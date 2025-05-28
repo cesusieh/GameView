@@ -1,84 +1,66 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchGameById } from "../services/rawg";
+import { deleteReview, getGameReviews, postReview } from "../services/reviews";
 import "../styles/game-page.css";
 import NavBar from "../common/NavBar";
-import axios from "axios";
+import { checkAuth } from "../services/auth";
 
 export default function GamePage() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [review, setReview] = useState("");
   const [resultMsg, setResultMsg] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [userReviews, setUserReviews] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login", {
-        state: { message: "Você precisa estar autenticado para acessar esta página." },
-      });
-      return;
-    }
+    const verifyAndLoad = async () => {
+      const authenticated = await checkAuth();
 
-    axios
-      .get("http://localhost:5044/api/auth/check", { withCredentials: true })
-      .then(() => {
-        async function loadGame() {
-          setLoading(true);
-          setError(null);
-
-          try {
-            const data = await fetchGameById(id);
-            setGame(data);
-          } catch (err) {
-            setError(err.message);
-          } finally {
-            setLoading(false);
-          }
-        }
-
-        loadGame();
-      })
-      .catch(() => {
+      if (!authenticated) {
         navigate("/login", {
-          state: { message: "Você precisa estar autenticado para acessar esta página." },
+          state: {
+            message: "Você precisa estar autenticado para acessar esta página.",
+          },
         });
-      });
+        return;
+      }
+
+      setAuthChecked(true);
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await fetchGameById(id);
+        setGame(data);
+
+        const userReviewsData = await getGameReviews(id);
+        setUserReviews(userReviewsData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyAndLoad();
   }, [id, navigate]);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    if (!review.trim()) {
-      setResultMsg({ error: true, text: "Por favor, escreva sua review." });
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5044/api/reviews",
-        {
-          GameID: id,
-          Content: review,
-        },
-        { withCredentials: true }
-      );
-
-      console.log("Resposta do servidor:", response.data);
-
-      setResultMsg({ error: false, text: "Review enviada com sucesso! Obrigado." });
-      setReview("");
-
-      // Redireciona para "Minhas Reviews" após o envio
-      setTimeout(() => {
-        navigate("/my-reviews");
-      }, 1500);
-    } catch (err) {
-      setResultMsg({ error: true, text: "Erro ao enviar a review. Tente novamente." });
-    }
+  if (!authChecked) {
+    return (
+      <>
+        <NavBar />
+        <div className="body">
+          <p>Verificando autenticação...</p>
+        </div>
+      </>
+    );
   }
 
   if (loading) {
@@ -104,6 +86,45 @@ export default function GamePage() {
   }
 
   if (!game) return null;
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!review.trim()) {
+      setResultMsg({ error: true, text: "Por favor, escreva sua review." });
+      return;
+    }
+
+    try {
+      await postReview(id, review);
+
+      setResultMsg({
+        error: false,
+        text: "Review enviada com sucesso! Obrigado.",
+      });
+      setReview("");
+
+      // Atualiza a lista de reviews sem redirecionar
+      const updatedReviews = await getGameReviews(id);
+      setUserReviews(updatedReviews);
+
+    } catch (err) {
+      setResultMsg({
+        error: true,
+        text: "Erro ao enviar a review. Tente novamente.",
+      });
+    }
+  }
+
+  async function handleDeleteReview(reviewId) {
+    try {
+      await deleteReview(reviewId);
+
+      setUserReviews(userReviews.filter((rev) => rev.id !== reviewId));
+    } catch (error) {
+      alert("Erro ao deletar a review, tente novamente.");
+    }
+  }
 
   return (
     <>
@@ -145,7 +166,7 @@ export default function GamePage() {
                   placeholder="Escreva sua review aqui..."
                 />
               </div>
-              <button type="submit">Enviar Review</button>
+              <button className="form-button" type="submit">Enviar Review</button>
             </form>
             {resultMsg && (
               <div
@@ -154,6 +175,31 @@ export default function GamePage() {
                 }
               >
                 {resultMsg.text}
+              </div>
+            )}
+
+            {userReviews.length > 0 && (
+              <div className="user-reviews">
+                <h3>Suas reviews anteriores:</h3>
+                {userReviews.map((rev, index) => (
+                  <div key={index} className="user-review-item">
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteReview(rev.id)}
+                      title="Deletar review"
+                    >
+                      🗑️
+                    </button>
+                    <p>{rev.content}</p>
+                    <span className="review-date">
+                      {new Date(rev.createdAt).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                ))}
               </div>
             )}
           </div>

@@ -75,21 +75,21 @@ namespace API.Controllers
                 token = HCToken
             });
         }
-        [HttpPost("logout")]
+
+        [HttpPost("/api/logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Append("token", "", new CookieOptions
+            Response.Cookies.Delete("token", new CookieOptions
             {
-                Expires = DateTimeOffset.UtcNow.AddDays(-1),
+                Secure = true,
                 HttpOnly = true,
-                SameSite = SameSiteMode.Strict,
-                Secure = true
+                SameSite = SameSiteMode.Lax
             });
 
             return Ok(new { message = "Logout realizado com sucesso!" });
         }
 
-        [HttpGet("/api/auth/check")]
+        [HttpGet("/api/check")]
         [Authorize]
         public IActionResult CheckAuth()
         {

@@ -6,14 +6,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using API.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddScoped<GamesController>();
-
 
 builder.Services.AddCors(options =>
 {
@@ -59,7 +56,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Aqui substituí RapidApiGameReviewService pelo Rawg
 builder.Services.AddHttpClient<Rawg>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
     {
@@ -69,7 +65,6 @@ builder.Services.AddHttpClient<Rawg>()
 string connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// Configura o serviço de autenticação JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -100,7 +95,6 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configuração de ambiente de desenvolvimento para Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -110,7 +104,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Configuração dos middlewares de autenticação e autorização
 app.UseAuthentication();  
 app.UseAuthorization();
 app.UseCors("AllowLocalhost3000");

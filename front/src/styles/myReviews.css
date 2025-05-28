@@ -1,0 +1,27 @@
+.my-reviews-container {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  /* margin-top: 1rem; */ /* removido para grudar */
+}
+
+.my-reviews-header {
+  grid-column: 1 / -1;
+  text-align: left;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.review-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+  font-style: italic;
+}

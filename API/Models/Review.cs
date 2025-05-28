@@ -7,23 +7,20 @@ namespace API.Models
     public class Review
     {
         [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }       
 
         [Required]
-        public int GameID { get; set; }
+        public int UserId { get; set; }
+
+        [Required]
+        public int GameId { get; set; }
 
         [Required]
         public string Content { get; set; }
 
-        [Required]
-        public int UserID { get; set; }
-
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public DateTime? UpdatedAt { get; set; }
-
-        // Relação com a entidade User
-        [ForeignKey("UserID")]
+        [ForeignKey("UserId")]
         public User User { get; set; }
     }
 }

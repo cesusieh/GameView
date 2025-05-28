@@ -25,15 +25,12 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            // Verificando se o username já está em uso
             bool usernameVerify = await _appDbContext.User.AnyAsync(u => u.Username == user.Username);
             if (usernameVerify)
             {
                 return Conflict(new { message = "O nome de usuário já está em uso!" });
             }
 
-            // Hash da senha
             var passwordHasher = new PasswordHasher<User>();
             user.Password = passwordHasher.HashPassword(user, user.Password);
 
