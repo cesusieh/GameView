@@ -7,8 +7,9 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 445px 20px 20px; 
+  padding: 2vh 2vw 2vh; 
   box-sizing: border-box;
+  padding-top: calc(60px + 5vw);
 }
 
 .container {
@@ -197,13 +198,23 @@ textarea:focus {
     flex: 2;
     margin-top: 0; 
   }
+
+  .game-page {
+    padding-top: calc(480px + 3vw);
+  }
+}
+
+@media (max-width: 480px) {
+  .game-page {
+    padding-top: calc(490px + 4vh);
+  }
 }
 
 .game-footer {
-  padding: 18px 0px 0px;
+  padding: 18px 0;
+  margin-top: 20px;
   text-align: center;
   color: #bbb;
   font-size: 14px;
-  width: 100%; 
-  box-sizing: border-box; 
+  z-index: 10;
 }
